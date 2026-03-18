@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Unit Outline{% endblock %}
+
+{% block content %}
+<h1>Edit Unit Outline: {{ unit.title }}</h1>
+
+<!-- Unit Info -->
+<h2>Unit Information</h2>
+<table style="width: auto;">
+    <tr><td><strong>Unit Code:</strong></td><td>{{ unit.code }}</td></tr>
+    <tr><td><strong>Title:</strong></td><td>{{ unit.title }}</td></tr>
+    <tr><td><strong>Year Level:</strong></td><td>{{ unit.year_level }}</td></tr>
+    <tr><td><strong>VET:</strong></td><td><input type="checkbox"> Delivered as VET</td></tr>
+</table>
+
+<hr>
+
+<!-- Assessment Items -->
+<h2>Assessment Items & Due Dates</h2>
+<p><em>Term Calendar: Semester 1 (27 Jan - 30 Jun 2026)</em></p>
+<table>
+    <tr>
+        <th>Assessment</th>
+        <th>Weight</th>
+        <th>Start Date</th>
+        <th>Due Date</th>
+        <th>Actions</th>
+    </tr>
+    {% for item in assessment_items %}
+    <tr>
+        <td>{{ item.name }}</td>
+        <td>{{ item.weighting }}</td>
+        <td><input type="text" value="{{ item.start_date }}" size="10"></td>
+        <td><input type="text" value="{{ item.due_date }}" size="10"></td>
+        <td><button class="btn">Edit</button></td>
+    </tr>
+    {% endfor %}
+</table>
+
+<hr>
+
+<!-- Resources -->
+<h2>Additional Resources</h2>
+<p>
+    Upload Planner (PDF): <input type="file"><br>
+    <input type="checkbox"> Post publicly
+</p>
+
+<hr>
+
+<!-- Sync -->
+<h2>Sync to Other Units</h2>
+<p>
+    <input type="checkbox"> Apply dates to all Digital Solutions units
+</p>
+
+<hr>
+
+<!-- Buttons -->
+<p>
+    <a href="{% url 'teacher_portal:dashboard' %}" class="btn">Cancel</a>
+    <button class="btn">Save Draft</button>
+    <button class="btn">Save & Publish</button>
+</p>
+{% endblock %}

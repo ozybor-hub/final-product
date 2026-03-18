@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Calendar{% endblock %}
+
+{% block content %}
+<h1>Calendar - {{ month_name }} {{ year }}</h1>
+
+<p>
+    <button class="btn">Previous</button>
+    <button class="btn">Next</button>
+</p>
+
+<table>
+    <tr>
+        <th>Mon</th>
+        <th>Tue</th>
+        <th>Wed</th>
+        <th>Thu</th>
+        <th>Fri</th>
+        <th>Sat</th>
+        <th>Sun</th>
+    </tr>
+    {% for week in calendar_weeks %}
+    <tr>
+        {% for day in week %}
+        <td style="height: 60px; vertical-align: top; {% if day.is_today %}background: #ff0;{% endif %}{% if day.other_month %}color: #ccc;{% endif %}">
+            <strong>{{ day.number }}</strong><br>
+            {% for event in day.events %}
+            <small>{{ event.label }}</small><br>
+            {% endfor %}
+        </td>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+</table>
+
+<p>
+    <strong>Legend:</strong>
+    Deadline | Start Date | Term Date
+</p>
+{% endblock %}

@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<!-- Messages -->
+{% if messages %}
+<ul>
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<h1>Welcome back, {{ user_name }}</h1>
+
+<!-- Quick Actions -->
+<h2>Quick Actions</h2>
+<p>
+    <a href="{% url 'teacher_portal:unit_outline' %}" class="btn">+ New Unit Outline</a>
+    |
+    <a href="{% url 'teacher_portal:calendar' %}" class="btn">View Calendar</a>
+</p>
+
+<!-- Clone Form -->
+<form method="post" action="{% url 'teacher_portal:clone_unit_action' %}">
+    {% csrf_token %}
+    <label>Clone existing unit:</label>
+    <select name="unit_id">
+        {% for unit in recent_units %}
+        <option value="{{ unit.id }}">{{ unit.name }} ({{ unit.code }})</option>
+        {% empty %}
+        <option disabled>No units</option>
+        {% endfor %}
+    </select>
+    <button type="submit" {% if not recent_units %}disabled{% endif %}>Clone</button>
+</form>
+
+<hr>
+
+<!-- Recent Unit Outlines -->
+<h2>Recent Unit Outlines</h2>
+{% for unit in recent_units %}
+<div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
+    <strong>{{ unit.name }}</strong> [{{ unit.status }}]<br>
+    Code: {{ unit.code }}<br>
+    Last Modified: {{ unit.last_modified|date:"d M Y" }}<br>
+    Due: {{ unit.due_dates_info }}<br>
+    <a href="{% url 'teacher_portal:unit_outline' %}">Edit</a>
+</div>
+{% empty %}
+<p>No unit outlines yet.</p>
+{% endfor %}
+
+<hr>
+
+<!-- Upcoming Deadlines -->
+<h2>Upcoming Deadlines</h2>
+<table>
+    <tr>
+        <th>Assessment</th>
+        <th>Unit</th>
+        <th>Due Date</th>
+        <th>Status</th>
+    </tr>
+    {% for d in upcoming_deadlines %}
+    <tr>
+        <td>{{ d.assessment_item }}</td>
+        <td>{{ d.unit }}</td>
+        <td>{{ d.due_date|date:"d M Y" }}</td>
+        <td>{{ d.status }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="4">No deadlines</td></tr>
+    {% endfor %}
+</table>
+{% endblock %}

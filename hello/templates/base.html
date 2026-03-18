@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Teacher Portal{% endblock %}</title>
+    <style>
+        /* Minimal reset */
+        body { font-family: sans-serif; margin: 20px; }
+        a { color: blue; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid black; padding: 5px; text-align: left; }
+        th { background: #ddd; }
+        .btn { padding: 5px 10px; cursor: pointer; }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+     <!--- navigation -->
+    <nav style="margin-bottom: 20px; padding: 10px; background: #333;">
+        <a href="{% url 'teacher_portal:dashboard' %}" style="color: white; margin-right: 15px;">Dashboard</a>
+        <a href="{% url 'teacher_portal:markbook' %}" style="color: white; margin-right: 15px;">My Markbooks</a>
+        <a href="{% url 'teacher_portal:unit_outline' %}" style="color: white; margin-right: 15px;">Unit Outlines</a>
+        <a href="{% url 'teacher_portal:calendar' %}" style="color: white;">Calendar</a>
+    </nav>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
