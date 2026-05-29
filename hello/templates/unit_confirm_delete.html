@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Delete Unit{% endblock %}
+
+{% block content %}
+<h1>Delete unit?</h1>
+<p>Are you sure you want to delete <strong>{{ unit.name }}</strong> ({{ unit.code }})?</p>
+<p>This will also delete all assessment items belonging to this unit.</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn">Yes, delete</button>
+    <a href="{% url 'teacher_portal:unit_edit' unit.pk %}" class="btn">Cancel</a>
+</form>
+{% endblock %}

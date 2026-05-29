@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Units{% endblock %}
+
+{% block content %}
+<h1>Unit Outlines</h1>
+
+<p><a href="{% url 'teacher_portal:unit_new' %}" class="btn">+ New Unit</a></p>
+
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Code</th>
+        <th>Year</th>
+        <th>Status</th>
+        <th>Planner</th>
+        <th>Modified</th>
+        <th>Actions</th>
+    </tr>
+    {% for u in units %}
+    <tr>
+        <td><a href="{% url 'teacher_portal:unit_edit' u.pk %}">{{ u.name }}</a></td>
+        <td>{{ u.code }}</td>
+        <td>{{ u.year_level }}</td>
+        <td>{{ u.get_status_display }}{% if u.release_as_vet %} <span style="background:#ffd; border:1px solid #aa0; padding:1px 4px;">VET</span>{% endif %}</td>
+        <td>{% if u.planner_pdf %}<a href="{{ u.planner_pdf.url }}" target="_blank">View</a>{% else %}-{% endif %}</td>
+        <td>{{ u.modified_date|date:"d M Y" }}</td>
+        <td>
+            <a href="{% url 'teacher_portal:unit_edit' u.pk %}">Edit</a> |
+            <a href="{% url 'teacher_portal:unit_print' u.pk %}">Print</a> |
+            <a href="{% url 'teacher_portal:unit_delete' u.pk %}">Delete</a>
+        </td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="7">No units yet.</td></tr>
+    {% endfor %}
+</table>
+{% endblock %}

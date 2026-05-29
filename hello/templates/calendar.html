@@ -1,13 +1,14 @@
 {% extends 'base.html' %}
 
-{% block title %}Calendar{% endblock %}
+{% block title %}Calendar - {{ month_name }} {{ year }}{% endblock %}
 
 {% block content %}
 <h1>Calendar - {{ month_name }} {{ year }}</h1>
 
 <p>
-    <button class="btn">Previous</button>
-    <button class="btn">Next</button>
+    <a href="?year={{ prev_year }}&month={{ prev_month }}" class="btn">Previous</a>
+    <a href="{% url 'teacher_portal:calendar' %}" class="btn">Today</a>
+    <a href="?year={{ next_year }}&month={{ next_month }}" class="btn">Next</a>
 </p>
 
 <table>
@@ -20,13 +21,13 @@
         <th>Sat</th>
         <th>Sun</th>
     </tr>
-    {% for week in calendar_weeks %}
+    {% for week in weeks %}
     <tr>
         {% for day in week %}
-        <td style="height: 60px; vertical-align: top; {% if day.is_today %}background: #ff0;{% endif %}{% if day.other_month %}color: #ccc;{% endif %}">
+        <td style="height: 70px; vertical-align: top; {% if day.is_today %}background: #ff0;{% endif %}{% if day.other_month %}color: #ccc;{% endif %}">
             <strong>{{ day.number }}</strong><br>
             {% for event in day.events %}
-            <small>{{ event.label }}</small><br>
+            <small><a href="{% url 'teacher_portal:unit_edit' event.unit_id %}">{{ event.label }}</a> ({{ event.unit }})</small><br>
             {% endfor %}
         </td>
         {% endfor %}
@@ -34,8 +35,5 @@
     {% endfor %}
 </table>
 
-<p>
-    <strong>Legend:</strong>
-    Deadline | Start Date | Term Date
-</p>
+<p><em>Events come from each unit's assessment start & due dates. Edit a unit and the calendar updates automatically.</em></p>
 {% endblock %}

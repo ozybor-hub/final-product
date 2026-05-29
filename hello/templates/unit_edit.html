@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if unit %}Edit{% else %}New{% endif %} Unit Outline{% endblock %}
+
+{% block content %}
+<h1>{% if unit %}Edit Unit Outline: {{ unit.name }}{% else %}New Unit Outline{% endif %}</h1>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <h2>Unit Information</h2>
+    <table style="width: auto;">
+        {% for field in form %}
+        <tr>
+            <td><strong>{{ field.label }}:</strong></td>
+            <td>
+                {{ field }}
+                {% if field.errors %}{{ field.errors }}{% endif %}
+                {% if field.help_text %}<br><small>{{ field.help_text }}</small>{% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    {% if unit and unit.planner_pdf %}
+    <p>Current planner: <a href="{{ unit.planner_pdf.url }}" target="_blank">{{ unit.planner_pdf.name }}</a></p>
+    {% endif %}
+
+    <hr>
+
+    <h2>Assessment Items & Due Dates</h2>
+    <p><em>Dates entered here automatically appear on the Calendar.</em></p>
+
+    {{ formset.management_form }}
+    <table>
+        <tr>
+            <th>Assessment</th>
+            <th>Weight (%)</th>
+            <th>Start Date</th>
+            <th>Due Date</th>
+            <th>Delete</th>
+        </tr>
+        {% for f in formset %}
+        <tr>
+            {% for hidden in f.hidden_fields %}{{ hidden }}{% endfor %}
+            <td>{{ f.name }}</td>
+            <td>{{ f.weight }}</td>
+            <td>{{ f.start_date }}</td>
+            <td>{{ f.due_date }}</td>
+            <td>{% if f.instance.pk %}{{ f.DELETE }}{% endif %}</td>
+        </tr>
+        {% if f.errors %}
+        <tr><td colspan="5" style="color:red;">{{ f.errors }}</td></tr>
+        {% endif %}
+        {% endfor %}
+    </table>
+
+    <hr>
+
+    <p>
+        <a href="{% url 'teacher_portal:unit_list' %}" class="btn">Cancel</a>
+        <button type="submit" class="btn">Save</button>
+        {% if unit %}
+        <a href="{% url 'teacher_portal:unit_delete' unit.pk %}" class="btn" style="float:right;">Delete Unit</a>
+        {% endif %}
+    </p>
+</form>
+{% endblock %}

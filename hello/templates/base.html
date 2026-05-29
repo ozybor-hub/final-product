@@ -4,26 +4,33 @@
     <meta charset="UTF-8">
     <title>{% block title %}Teacher Portal{% endblock %}</title>
     <style>
-        /* Minimal reset */
         body { font-family: sans-serif; margin: 20px; }
         a { color: blue; }
         table { border-collapse: collapse; width: 100%; }
         th, td { border: 1px solid black; padding: 5px; text-align: left; }
         th { background: #ddd; }
         .btn { padding: 5px 10px; cursor: pointer; }
+        input[type=text], input[type=number], input[type=date], select, textarea { padding: 3px; }
+        ul.errorlist { color: red; margin: 2px 0; padding-left: 18px; }
     </style>
     {% block extra_css %}{% endblock %}
 </head>
 <body>
-     <!--- navigation -->
     <nav style="margin-bottom: 20px; padding: 10px; background: #333;">
         <a href="{% url 'teacher_portal:dashboard' %}" style="color: white; margin-right: 15px;">Dashboard</a>
-        <a href="{% url 'teacher_portal:markbook' %}" style="color: white; margin-right: 15px;">My Markbooks</a>
-        <a href="{% url 'teacher_portal:unit_outline' %}" style="color: white; margin-right: 15px;">Unit Outlines</a>
-        <a href="{% url 'teacher_portal:calendar' %}" style="color: white;">Calendar</a>
+        <a href="{% url 'teacher_portal:unit_list' %}" style="color: white; margin-right: 15px;">Units</a>
+        <a href="{% url 'teacher_portal:calendar' %}" style="color: white; margin-right: 15px;">Calendar</a>
+        <a href="{% url 'teacher_portal:unit_new' %}" style="color: white;">+ New Unit</a>
     </nav>
 
     <main>
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
         {% block content %}{% endblock %}
     </main>
 
